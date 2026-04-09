@@ -1,3 +1,19 @@
+# Streamlit app
 streamlit==1.29.0
-pandas==2.1.0
-matplotlib==3.8.1
+
+# Data manipulation
+pandas==2.1.0 --prefer-binary
+numpy==1.26.4 --prefer-binary
+
+# Plotting
+matplotlib==3.8.1 --prefer-binary
+seaborn==0.12.3 --prefer-binary
+
+# Image processing (used by matplotlib or Pillow)
+Pillow==10.4.0 --prefer-binary
+
+# Optional utilities for nicer logs
+rich==14.3.3
+markdown-it-py==4.0.0
+mdurl==0.1.2
+pygments==2.20.0
