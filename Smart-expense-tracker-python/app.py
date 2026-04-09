@@ -37,11 +37,19 @@ def analyze_month(month):
 
     insights["total"] = month_df["Amount"].sum()
     insights["category_breakdown"] = month_df.groupby("Category")["Amount"].sum()
-    insights["highest_category"] = insights["category_breakdown"].idxmax()
+    if insights["category_breakdown"].empty:
+        insights["highest_category"] = "No data"
+    else:
+        insights["highest_category"] = insights["category_breakdown"].idxmax()
     insights["avg_daily"] = insights["total"]/month_df["Date"].nunique()
     insights["cashless_ratio"] = (month_df[month_df["PaymentMethod"] != "Cash"].shape[0]/month_df.shape[0])*100
     insights["recurring_cost"] = month_df[month_df["Recurring"] == "Yes"]["Amount"].sum()
-    insights["top_location"] = month_df.groupby("Location")["Amount"].sum().idxmax()
+    insights["top_location"] = month_df.groupby("Location")["Amount"].sum()
+
+    if location_data.empty:
+        insights["top_location"] = "No data"
+    else:
+        insights["top_location"] = location_data.idxmax()
 
     return insights
 
@@ -75,7 +83,8 @@ if menu == "Add Expense":
 else:
     st.subheader("📊Monthly Expense Insights")
 
-    month = st.text_input("Enter Month (YYYY-MM)",value="2026-03")
+    month = st.date_input("Select Month")
+    month = month.strftime("%Y-%m")
 
     if st.button("Generate Insights"):
         insights = analyze_month(month)
