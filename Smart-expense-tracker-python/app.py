@@ -44,7 +44,7 @@ def analyze_month(month):
     insights["avg_daily"] = insights["total"]/month_df["Date"].nunique()
     insights["cashless_ratio"] = (month_df[month_df["PaymentMethod"] != "Cash"].shape[0]/month_df.shape[0])*100
     insights["recurring_cost"] = month_df[month_df["Recurring"] == "Yes"]["Amount"].sum()
-    location_data = month.df.groupby("Location")["Amount"].sum()
+    location_data = month_df.groupby("Location")["Amount"].sum()
     if location_data.empty:
         insights["top_location"] = "No data"
     else:
