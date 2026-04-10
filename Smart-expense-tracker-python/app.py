@@ -14,7 +14,12 @@ def initialize_file():
 
 #Load data
 def load_data():
+    if not os.path.exists(File_name):
+        return pd.DataFrame(columns=["Date","Category","Amount","Type","Description","PaymentMethod","User","Location","Recurring"])
     df = pd.read_csv(File_name)
+
+    if df.empty:
+        return df
     df["Date"] = pd.to_datetime(df["Date"],errors="coerce")
     df=df.dropna(subset=["Date"])
     return df
@@ -22,6 +27,7 @@ def load_data():
 #Add expense
 def add_expense(data):
     df = load_data()
+    new df = pd.DataFrame([data])
     df = pd.concat([df,pd.DataFrame([data])],ignore_index=True)
     df.to_csv(File_name,index = False)
 
