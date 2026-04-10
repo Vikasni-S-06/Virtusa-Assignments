@@ -18,7 +18,6 @@ def load_data():
     df.columns = df.columns.str.strip()
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
     df = df.dropna(subset=["Date"])
-E
     df["Month"] = df["Date"].dt.strftime("%Y-%m")
 
     return df
