@@ -11,7 +11,7 @@ def initialize_file():
     if not os.path.exists(File_name):
         df = pd.DataFrame(columns=["Date","Category","Amount","Type","Description","PaymentMethod","User","Location","Recurring"])
 
-#Load data
+
 def load_data():
     df = pd.read_csv(File_name)
 
@@ -100,14 +100,14 @@ else:
 
     if st.button("Generate Insights"):
 
-    df = load_data()
+        df = load_data()
+    
+        st.write("All Months in dataset:")
+        st.write(df["Month"].unique())
+    
+        st.write("Selected month:", month)
 
-    st.write("All Months in dataset:")
-    st.write(df["Month"].unique())
-
-    st.write("Selected month:", month)
-
-    insights = analyze_month(month)
+        insights = analyze_month(month)
 
         if insights is None:
             st.warning("No data found for this month.")
