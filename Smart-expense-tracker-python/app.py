@@ -36,7 +36,15 @@ def analyze_month(month):
     month_df=df[df["Date"].dt.strftime("%Y-%m") == month]
 
     if month_df.empty:
-        return None
+    return {
+        "total": 0,
+        "category_breakdown": pd.Series(dtype=float),
+        "highest_category": "No data",
+        "avg_daily": 0,
+        "cashless_ratio": 0,
+        "recurring_cost": 0,
+        "top_location": "No data"
+    }
     
     insights = {}
 
@@ -105,16 +113,19 @@ else:
             st.info(f"🔁Recurring Monthly Cost: **₹ {insights['recurring_cost']:.2f}%**")
 
             #Pie Chart
-            fig, ax = plt.subplots()
-            ax.pie(
-                insights["category_breakdown"].values,
-                labels=insights["category_breakdown"].index,
-                autopct="%1.1f%%",
-                startangle=90
-            )
-
-            ax.set_title("Category-wise Expense Distribution")
-            st.pyplot(fig)
+            if insights["category_breakdown"].empty or insights["total"] == 0:
+                st.warning("No data available to generate chart for this month.")
+            else:
+                fig, ax = plt.subplots()
+                ax.pie(
+                    insights["category_breakdown"].values,
+                    labels=insights["category_breakdown"].index,
+                    autopct="%1.1f%%",
+                    startangle=90
+                )
+    
+                ax.set_title("Category-wise Expense Distribution")
+                st.pyplot(fig)
 
             #Smart Suggestions
             st.subheader("💡Smart Spending Suggestions")
