@@ -5,6 +5,13 @@ The application provides meaningful insights and visualizations to understand sp
 
 ---
 
+
+## 🔗Streamlit App link
+https://smart-expense-tracker-vikasni-06.streamlit.app/
+
+
+---
+
 ## 📌 Problem Statement
 Many individuals struggle to track daily expenses and understand where their money goes.  
 This project aims to simplify expense tracking and provide clear monthly insights using data analysis and visualization.
