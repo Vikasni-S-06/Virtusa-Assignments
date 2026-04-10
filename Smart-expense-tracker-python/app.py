@@ -13,8 +13,7 @@ def initialize_file():
 
 #Load data
 def load_data():
-    if not os.path.exists(File_name):
-        return pd.DataFrame(columns=["Date","Category","Amount","Type","Description","PaymentMethod","User","Location","Recurring"])
+    idf.columns = df.columns.str.strip()
     df = pd.read_csv(File_name)
 
     if df.empty:
@@ -33,7 +32,8 @@ def add_expense(data):
 #Monthly analysis
 def analyze_month(month):
     df=load_data()
-    month_df=df[df["Date"].dt.strftime("%Y-%m") == month]
+    df["Month"] = df["Date"].dt.strftime("%Y-%m")
+    month_df = df[df["Month"] == month]
 
     if month_df.empty:
         return {
@@ -99,6 +99,10 @@ else:
     month = selected_date.strftime("%Y-%m")
 
     if st.button("Generate Insights"):
+        st.write("All Months in dataset:")
+        st.write(df["Month"].unique())
+        st.write("Selected month:", month)
+
         insights = analyze_month(month)
 
         if insights is None:
