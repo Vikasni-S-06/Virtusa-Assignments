@@ -9,8 +9,12 @@ File_name = "expenses.csv"
 
 def initialize_file():
     if not os.path.exists(File_name):
-        df = pd.DataFrame(columns=["Date","Category","Amount","Type","Description","PaymentMethod","User","Location","Recurring"])
-
+        df = pd.DataFrame(columns=[
+            "Date","Category","Amount","Type",
+            "Description","PaymentMethod",
+            "User","Location","Recurring"
+        ])
+        df.to_csv(File_name, index=False)
 
 def load_data():
     df = pd.read_csv(File_name)
@@ -25,14 +29,17 @@ def load_data():
 #Add expense
 def add_expense(data):
     df = load_data()
-    new_df = pd.DataFrame([data])
-    df = pd.concat([df,pd.DataFrame([data])],ignore_index=True)
-    df.to_csv(File_name,index = False)
+
+    new_row = pd.DataFrame([data])
+
+    df = pd.concat([df, new_row], ignore_index=True)
+
+    df.to_csv(File_name, index=False)
 
 #Monthly analysis
 def analyze_month(month):
-    df=load_data()
-    df["Month"] = df["Date"].dt.strftime("%Y-%m")
+    df = load_data()
+
     month_df = df[df["Month"] == month]
 
     if month_df.empty:
@@ -45,26 +52,28 @@ def analyze_month(month):
             "recurring_cost": 0,
             "top_location": "No data"
         }
-    
+
     insights = {}
 
     insights["total"] = month_df["Amount"].sum()
     insights["category_breakdown"] = month_df.groupby("Category")["Amount"].sum()
-    if insights["category_breakdown"].empty:
-        insights["highest_category"] = "No data"
-    else:
-        insights["highest_category"] = insights["category_breakdown"].idxmax()
-    insights["avg_daily"] = insights["total"]/month_df["Date"].nunique()
-    insights["cashless_ratio"] = (month_df[month_df["PaymentMethod"] != "Cash"].shape[0]/month_df.shape[0])*100
+
+    insights["highest_category"] = (
+        insights["category_breakdown"].idxmax()
+        if not insights["category_breakdown"].empty
+        else "No data"
+    )
+
+    insights["avg_daily"] = insights["total"] / month_df["Date"].nunique()
+    insights["cashless_ratio"] = (month_df[month_df["PaymentMethod"] != "Cash"].shape[0] / month_df.shape[0]) * 100
     insights["recurring_cost"] = month_df[month_df["Recurring"] == "Yes"]["Amount"].sum()
+
     location_data = month_df.groupby("Location")["Amount"].sum()
-    if location_data.empty:
-        insights["top_location"] = "No data"
-    else:
-        insights["top_location"] = location_data.idxmax()
+    insights["top_location"] = (
+        location_data.idxmax() if not location_data.empty else "No data"
+    )
 
     return insights
-
 #Streamlit UI
 st.set_page_config(page_title="Smart Expense Tracker",layout="centered")
 st.title("💡Smart Expense Tracker With Insights")
@@ -109,7 +118,7 @@ else:
 
         insights = analyze_month(month)
 
-        if insights is None:
+        if insights["total"] == 0:
             st.warning("No data found for this month.")
         else:
             st.metric("Total Monthly Spend",f"₹{insights['total']:.2f}")
