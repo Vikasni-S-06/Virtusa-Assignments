@@ -7,8 +7,9 @@ from datetime import date
 #Initializing dataset
 File_name = "expenses.csv"
 
-def initialize_file(): if not os.path.exists(File_name):
-    df = pd.DataFrame(columns=["Date","Category","Amount","Type","Description","PaymentMethod","User","Location","Recurring"])
+def initialize_file():
+    if not os.path.exists(File_name):
+        df = pd.DataFrame(columns=["Date","Category","Amount","Type","Description","PaymentMethod","User","Location","Recurring"])
 
 #Load data
 def load_data():
