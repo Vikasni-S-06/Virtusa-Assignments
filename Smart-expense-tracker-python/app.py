@@ -27,7 +27,7 @@ def load_data():
 #Add expense
 def add_expense(data):
     df = load_data()
-    new df = pd.DataFrame([data])
+    new_df = pd.DataFrame([data])
     df = pd.concat([df,pd.DataFrame([data])],ignore_index=True)
     df.to_csv(File_name,index = False)
 
