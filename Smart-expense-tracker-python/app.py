@@ -7,11 +7,6 @@ from datetime import date
 #Initializing dataset
 File_name = "expenses.csv"
 
-def initialize_file():
-    if not os.path.exists(File_name):
-        df = pd.DataFrame(columns=["Date","Category","Amount","Type","Description","PaymentMethod","User","Location","Recurring"])
-        df.to_csv(File_name,index=False)
-
 #Load data
 def load_data():
     if not os.path.exists(File_name):
@@ -88,8 +83,8 @@ if menu == "Add Expense":
 else:
     st.subheader("📊Monthly Expense Insights")
 
-    month = st.date_input("Select Month")
-    month = month.strftime("%Y-%m")
+    selected_date = st.date_input("Select any date in month")
+    month = selected_date.strftime("%Y-%m")
 
     if st.button("Generate Insights"):
         insights = analyze_month(month)
