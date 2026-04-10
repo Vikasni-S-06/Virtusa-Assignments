@@ -13,13 +13,14 @@ def initialize_file():
 
 #Load data
 def load_data():
-    idf.columns = df.columns.str.strip()
     df = pd.read_csv(File_name)
 
-    if df.empty:
-        return df
-    df["Date"] = pd.to_datetime(df["Date"],errors="coerce")
-    df=df.dropna(subset=["Date"])
+    df.columns = df.columns.str.strip()
+    df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
+    df = df.dropna(subset=["Date"])
+E
+    df["Month"] = df["Date"].dt.strftime("%Y-%m")
+
     return df
 
 #Add expense
@@ -99,11 +100,15 @@ else:
     month = selected_date.strftime("%Y-%m")
 
     if st.button("Generate Insights"):
-        st.write("All Months in dataset:")
-        st.write(df["Month"].unique())
-        st.write("Selected month:", month)
 
-        insights = analyze_month(month)
+    df = load_data()
+
+    st.write("All Months in dataset:")
+    st.write(df["Month"].unique())
+
+    st.write("Selected month:", month)
+
+    insights = analyze_month(month)
 
         if insights is None:
             st.warning("No data found for this month.")
