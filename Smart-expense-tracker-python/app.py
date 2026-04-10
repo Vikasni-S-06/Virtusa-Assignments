@@ -36,15 +36,15 @@ def analyze_month(month):
     month_df=df[df["Date"].dt.strftime("%Y-%m") == month]
 
     if month_df.empty:
-    return {
-        "total": 0,
-        "category_breakdown": pd.Series(dtype=float),
-        "highest_category": "No data",
-        "avg_daily": 0,
-        "cashless_ratio": 0,
-        "recurring_cost": 0,
-        "top_location": "No data"
-    }
+        return {
+            "total": 0,
+            "category_breakdown": pd.Series(dtype=float),
+            "highest_category": "No data",
+            "avg_daily": 0,
+            "cashless_ratio": 0,
+            "recurring_cost": 0,
+            "top_location": "No data"
+        }
     
     insights = {}
 
